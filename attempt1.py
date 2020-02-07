@@ -101,6 +101,7 @@ plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 
+
 plt.subplot(2, 2, 3)
 plt.plot(epochs_range, dice, label='Training Dice Loss')
 plt.plot(epochs_range, val_dice, label='Validation Dice Loss')
@@ -108,3 +109,4 @@ plt.legend(loc='upper right')
 plt.title('Training and Validation Dice Loss')
 
 plt.savefig('training_loss.png')
+
