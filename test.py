@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from data import * 
 from model import * 
 from config import * 
+from metrics import * 
 
 MODEL_PATH = "./models/attempt1.hdf5"
 
@@ -46,7 +47,7 @@ for i in range(len(image_paths)):
     masks.append(mask)
 
 
-model = models.load_model(MODEL_PATH, custom_objects={'bce_dice_loss': bce_dice_loss,'dice_loss': dice_loss})
+model = models.load_model(MODEL_PATH, custom_objects={'bce_dice_loss':bce_dice_loss, 'jaccard_index': jaccard_index, 'dice_loss' : dice_loss})
 
 
 plt.figure(figsize=(10, 20))

@@ -1,0 +1,20 @@
+https://github.com/ternaus/TernausNetV2/blob/master/models/ternausnet2.py
+
+
+
+
+
+
+
+
+
+
+
+
+
+Experiments
+
+unet  5 epoch, batch_size = 3, adam, loss = bce_dice_loss.  ** 0.7301 jaccard_index ** no augment
+unet  25 epoch, batch_size = 32, adam (lr = 0.0004), loss = bce_dice_loss.  ** 0.7905 jaccard_index ** no augment
+
+

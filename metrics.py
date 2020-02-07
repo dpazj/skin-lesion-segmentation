@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.python.keras import losses
 from tensorflow.python.keras import backend as K 
 
+
 def dice_coeff(y_true, y_pred):
     smooth = 1.
     # Flatten
@@ -21,17 +22,13 @@ def bce_dice_loss(y_true, y_pred):
 
 
 def jaccard_index(y_true, y_pred):
-  smooth = 1.
-  intersection = K.sum(K.abs(y_true * y_pred), axis=-1)
-  sum_ = K.sum(K.abs(y_true) + K.abs(y_pred), axis=-1)
-  jac = (intersection + smooth) / (sum_ - intersection + smooth)
-  return jac
+    y_true_f = K.round(y_true)
+    y_pred_f = K.round(y_pred)
+    intersection = K.sum(K.abs(y_true_f * y_pred_f), axis=[1, 2, 3])
+    union = K.sum(K.abs(y_true_f) + K.abs(y_pred_f), axis=[1, 2, 3])
+    iou = intersection / K.clip(union - intersection, K.epsilon(), None)
+    return iou
 
-def jaccard_loss(y_true, y_pred):
-    loss = 1 - jaccard_index(y_true, y_pred)
-    return loss
 
-def bce_jaccard_loss(y_true, y_pred):
-    loss = losses.binary_crossentropy(y_true, y_pred) + jaccard_loss(y_true, y_pred)
-    return loss
+
 

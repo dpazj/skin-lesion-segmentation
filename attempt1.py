@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 
 
+
 from sklearn.model_selection import train_test_split
 from data import * 
 from model import * 
@@ -51,43 +52,31 @@ train_dataset = create_dataset(x_train,y_train,preprocess_fn=train_preprocess_fn
 validate_dataset = create_dataset(x_val,y_val,preprocess_fn=validate_preprocess_fn, batch_size=BATCH_SIZE)
 
 
-#learning rate schedule
-drop = 0.5
-epochs_drop = EPOCHS/5
-initial_lr = 0.001
-decay_rate = []
 
-def step_decay(epoch):
-    #LearningRate = InitialLearningRate * DropRate^floor(Epoch/EpochDrop)
-    lr = initial_lr * math.pow(drop, math.floor((1+epoch)/epochs_drop))
-    #store the decaying learning rate in a list
-    decay_rate.append(lr)
-    return lr
-
-learning_rate = tf.keras.callbacks.LearningRateScheduler(step_decay)
 
 model = create_unet_model(SHAPE)
-adam = tf.keras.optimizers.Adam(learning_rate=initial_lr, beta_1=0.9, beta_2=0.999, amsgrad=False)
 
-model.compile(optimizer=adam, loss=bce_jaccard_loss, metrics=[dice_loss, jaccard_loss])
+adam = tf.keras.optimizers.Adam(learning_rate=INITIAL_LR)
+
+model.compile(optimizer=adam, loss=bce_dice_loss, metrics=[dice_loss, jaccard_index])
 
 
 model.summary()
 
 
 save_path = './models/attempt1.hdf5'
-checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=save_path, monitor='val_jaccard_loss', save_best_only=True, verbose=1)
+checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=save_path, monitor='val_dice_loss', save_best_only=True, verbose=1)
 
 history = model.fit(train_dataset, 
                    steps_per_epoch=int(np.ceil(num_train / float(BATCH_SIZE))),
                    epochs=EPOCHS,
                    validation_data=validate_dataset,
                    validation_steps=int(np.ceil(num_val / float(BATCH_SIZE))),
-                   callbacks=[checkpoint, learning_rate]
+                   callbacks=[checkpoint]
                    )
 
-jaccard = history.history['jaccard_loss']
-val_jaccard = history.history['val_jaccard_loss']
+jaccard = history.history['jaccard_index']
+val_jaccard = history.history['val_jaccard_index']
 
 dice = history.history['dice_loss']
 val_dice = history.history['val_dice_loss']
@@ -104,7 +93,7 @@ plt.subplot(2, 2, 1)
 plt.plot(epochs_range, jaccard, label='Training Jaccard Loss')
 plt.plot(epochs_range, val_jaccard, label='Validation Jaccard Loss')
 plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
+plt.title('Training and Validation Jaccard Index')
 
 plt.subplot(2, 2, 2)
 plt.plot(epochs_range, loss, label='Training Loss')

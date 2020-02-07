@@ -16,19 +16,19 @@ def process_paths(image_path, mask_path):
 
 
 def rotate_img(image, mask):
-    image = tf.image.rot90(image, tf.random.uniform(shape=[], minval=0, maxval=4, dtype=tf.int32))
-    mask = tf.image.rot90(mask, tf.random.uniform(shape=[], minval=0, maxval=4, dtype=tf.int32))
+    # image = tf.image.rot90(image, tf.random.uniform(shape=[], minval=0, maxval=4, dtype=tf.int32))
+    # mask = tf.image.rot90(mask, tf.random.uniform(shape=[], minval=0, maxval=4, dtype=tf.int32))
     return image, mask
 
 def flip_img(image, mask, horizontal_flip = True):
-    do_flip = tf.random.uniform([]) > 0.5
+    # do_flip = tf.random.uniform([]) > 0.5
 
-    if horizontal_flip:
-        image = tf.cond(do_flip, lambda: tf.image.flip_left_right(image), lambda: image)
-        mask = tf.cond(do_flip, lambda: tf.image.flip_left_right(mask), lambda: mask)
-    else:
-        image = tf.cond(do_flip, lambda: tf.image.flip_up_down(image), lambda: image)
-        mask = tf.cond(do_flip, lambda: tf.image.flip_up_down(mask), lambda: mask)
+    # if horizontal_flip:
+    #     image = tf.cond(do_flip, lambda: tf.image.flip_left_right(image), lambda: image)
+    #     mask = tf.cond(do_flip, lambda: tf.image.flip_left_right(mask), lambda: mask)
+    # else:
+    #     image = tf.cond(do_flip, lambda: tf.image.flip_up_down(image), lambda: image)
+    #     mask = tf.cond(do_flip, lambda: tf.image.flip_up_down(mask), lambda: mask)
     return image, mask
 
 def augment(image, mask, resize=None, scale=1):
@@ -41,12 +41,7 @@ def augment(image, mask, resize=None, scale=1):
     mask = tf.dtypes.cast(mask, tf.float32) * scale 
 
     #TODO add more augmentations
-    image, mask = flip_img(image, mask)
-    image, mask = flip_img(image, mask, False)
-    image, mask = rotate_img(image, mask)
-
-    #image, mask = shift_img(image,mask, 0, 0)
-
+   
     return image, mask
 
 
