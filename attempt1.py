@@ -58,7 +58,7 @@ model = create_unet_model(SHAPE)
 
 adam = tf.keras.optimizers.Adam(learning_rate=INITIAL_LR)
 
-model.compile(optimizer=adam, loss=bce_dice_loss, metrics=[dice_loss, jaccard_index])
+model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[dice_loss, jaccard_index, dice_coeff])
 
 
 model.summary()
