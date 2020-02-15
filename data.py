@@ -21,14 +21,14 @@ def rotate_img(image, mask):
     return image, mask
 
 def flip_img(image, mask, horizontal_flip = True):
-    # do_flip = tf.random.uniform([]) > 0.5
+    do_flip = tf.random.uniform([]) > 0.5
 
-    # if horizontal_flip:
-    #     image = tf.cond(do_flip, lambda: tf.image.flip_left_right(image), lambda: image)
-    #     mask = tf.cond(do_flip, lambda: tf.image.flip_left_right(mask), lambda: mask)
-    # else:
-    #     image = tf.cond(do_flip, lambda: tf.image.flip_up_down(image), lambda: image)
-    #     mask = tf.cond(do_flip, lambda: tf.image.flip_up_down(mask), lambda: mask)
+    if horizontal_flip:
+        image = tf.cond(do_flip, lambda: tf.image.flip_left_right(image), lambda: image)
+        mask = tf.cond(do_flip, lambda: tf.image.flip_left_right(mask), lambda: mask)
+    else:
+        image = tf.cond(do_flip, lambda: tf.image.flip_up_down(image), lambda: image)
+        mask = tf.cond(do_flip, lambda: tf.image.flip_up_down(mask), lambda: mask)
     return image, mask
 
 def augment(image, mask, resize=None, scale=1):
@@ -41,6 +41,9 @@ def augment(image, mask, resize=None, scale=1):
     mask = tf.dtypes.cast(mask, tf.float32) * scale 
 
     #TODO add more augmentations
+
+    image, mask = flip_img(image, mask)
+    image, mask = flip_img(image, mask, False)
    
     return image, mask
 
