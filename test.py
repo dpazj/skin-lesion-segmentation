@@ -7,11 +7,12 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 
 from data import * 
-from model import * 
+from unet import * 
 from config import * 
 from metrics import * 
+from pretrained_backbone_unet import * 
 
-MODEL_PATH = "./models/augmentation4.hdf5"
+MODEL_PATH = "./models/VGG16UNET.hdf5"
 
 
 def post_process(predictions):
@@ -126,26 +127,26 @@ print('Pixelwise Specificity = %.4f, Pixelwise Sensitivity = %.4f, Accuracy = %.
 
 
 
-# for j in range(10):
-#   plt.figure(figsize=(10, 20))
+for j in range(10):
+  plt.figure(figsize=(10, 20))
 
-#   index = j * 5
+  index = j * 5
 
-#   for i in range(5):
-#     img = tf.expand_dims(images[index + i], axis=0)  
-#     predicted_label = predictions[index + i]
+  for i in range(5):
+    img = tf.expand_dims(images[index + i], axis=0)  
+    predicted_label = predictions[index + i]
 
-#     plt.subplot(5, 3, 3 * i + 1)
-#     plt.imshow(images[index + i])
-#     plt.title("Input image")
+    plt.subplot(5, 3, 3 * i + 1)
+    plt.imshow(images[index + i])
+    plt.title("Input image")
     
-#     plt.subplot(5, 3, 3 * i + 2)
-#     plt.imshow(masks[index + i][:, :, 0])
-#     plt.title("Actual Mask")
+    plt.subplot(5, 3, 3 * i + 2)
+    plt.imshow(masks[index + i][:, :, 0])
+    plt.title("Actual Mask")
 
-#     plt.subplot(5, 3, 3 * i + 3)
-#     plt.imshow(predicted_label[:, :, 0])
-#     plt.title("Predicted Mask")
+    plt.subplot(5, 3, 3 * i + 3)
+    plt.imshow(predicted_label[:, :, 0])
+    plt.title("Predicted Mask")
 
-#   plt.suptitle("Examples of Input Image, Label, and Prediction")
-#   plt.show()
+  plt.suptitle("Examples of Input Image, Label, and Prediction")
+  plt.show()

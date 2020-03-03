@@ -1,11 +1,14 @@
-https://github.com/ternaus/TernausNetV2/blob/master/models/ternausnet2.py
+https://github.com/ternaus/TernausNet
 
+https://s3.amazonaws.com/covalic-prod-assetstore/0e/28/0e28afd89eb843c3ab47ee8a203972db?response-content-disposition=inline%3B%20filename%3D%22ISIC_2018.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200302%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200302T104039Z&X-Amz-Signature=77cbc4be2ef48e21983aecbbaad67596b40ccaa4ea1f8a9f4f8d0156f1579ed6
 
+https://github.com/lucasb-eyer/pydensecrf - CRF
 https://s3.amazonaws.com/covalic-prod-assetstore/4e/83/4e83610ac0a14abf88e47789b66243f0?response-content-disposition=inline%3B%20filename%3D%221807.04893.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200229%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200229T224124Z&X-Amz-Signature=947f8925d7deaf8ce175216380d197f1502675ffa5800a163de139f0ff7b72f1
 
+https://s3.amazonaws.com/covalic-prod-assetstore/c1/ca/c1ca850e6bbb40789ff946ecac0fd559?response-content-disposition=inline%3B%20filename%3D%22NavidAlemiKoohbanani_ISIC2018report.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200302%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200302T170502Z&X-Amz-Signature=bf013ce5e5769cc286fdb86db002ff84058147f08a7bfd025ffea47edc07b345
+-- why my custom loss function is ok
 
-
-
+https://arxiv.org/pdf/1412.7062.pdf
 
 
 
@@ -20,9 +23,6 @@ b) is on validation set
 DATA AUGMENTATION
 
 1. unet  25 epoch, batch_size = 32, adam (lr = 0.0001), loss = bce NO AUGMENTATOIN
-
-
-	
 	a) 	val_loss: 0.1447 - val_jaccard_loss: 0.3130 - val_jaccard_index: 0.6870 - val_dice_coeff: 0.8132 - val_pixelwise_specificity: 0.9456 - val_pixelwise_sensitivity: 0.8592 - val_pixelwise_accuracy: 0.6962
 	b)	Mean Dice = 0.8353, Mean jaccard = 0.7511, Thresholded Jaccard = 0.6614 Pixelwise Specificity = 0.9939, Pixelwise Sensitivity = 0.8383, Accuracy = 0.9046
 
@@ -44,6 +44,40 @@ DATA AUGMENTATION
 
 	a)  val_loss: 0.1231 - val_jaccard_loss: 0.2881 - val_jaccard_index: 0.7119 - val_dice_coeff: 0.8303 - val_pixelwise_specificity: 0.9474 - val_pixelwise_sensitivity: 0.8614 - val_pixelwise_accuracy: 0.7688
 	b)  Mean Dice = 0.8119, Mean jaccard = 0.7227, Thresholded Jaccard = 0.6059 Pixelwise Specificity = 0.9790, Pixelwise Sensitivity = 0.8509, Accuracy = 0.8658
+
+
+
+5. unet 40 epoch, batch_size = 32, adam (lr = 0.0001), loss = bce  AUGMENTATOIN - all- hue, brightness, flip, shift, rotate
+	a)
+	b) Mean Dice = 0.8291, Mean jaccard = 0.7414, Thresholded Jaccard = 0.6717 Pixelwise Specificity = 0.9841, Pixelwise Sensitivity = 0.8386, Accuracy = 0.8951
+
+
+CUSTOM LOSS FUNCTION
+
+1. BCE 
+	a) val_loss: 0.1319 - val_jaccard_loss: 0.2974 - val_jaccard_index: 0.7026 - val_dice_coeff: 0.8248 - val_pixelwise_specificity: 0.9306 - val_pixelwise_sensitivity: 0.8851 - val_pixelwise_accuracy: 0.7320
+	b) Mean Dice = 0.8291, Mean jaccard = 0.7414, Thresholded Jaccard = 0.6717 Pixelwise Specificity = 0.9841, Pixelwise Sensitivity = 0.8386, Accuracy = 0.8951
+
+2. BCE + Jaccard loss alpha = 1 beta = 1
+
+	a) val_loss: 0.3757 - val_jaccard_loss: 0.2385 - val_jaccard_index: 0.7615 - val_dice_coeff: 0.8640 - val_pixelwise_specificity: 0.9632 - val_pixelwise_sensitivity: 0.8915 - val_pixelwise_accuracy: 0.8080
+	b) Mean Dice = 0.8346, Mean jaccard = 0.7509, Thresholded Jaccard = 0.6578 Pixelwise Specificity = 0.9852, Pixelwise Sensitivity = 0.8769, Accuracy = 0.8664
+
+ARCHITECTURE:
+
+1. UNET
+
+	a) val_loss: 0.4037 - val_jaccard_loss: 0.2623 - val_jaccard_index: 0.7377 - val_dice_coeff: 0.8487 - val_pixelwise_specificity: 0.9509 - val_pixelwise_sensitivity: 0.8922 - val_pixelwise_accuracy: 0.7476
+	b) Mean Dice = 0.9169, Mean jaccard = 0.8577, Thresholded Jaccard = 0.8441 Pixelwise Specificity = 0.9841, Pixelwise Sensitivity = 0.9009, Accuracy = 0.9551
+
+2. UNET VGG Backbone
+
+	a) loss: 0.2780 - jaccard_loss: 0.1792 - jaccard_index: 0.8208 - dice_coeff: 0.9012 - pixelwise_specificity: 0.9701 - pixelwise_sensitivity: 0.9058 - pixelwise_accuracy: 0.8655 - val_loss: 0.3400 - val_jaccard_loss: 0.2153 - val_jaccard_index: 0.7847 - val_dice_coeff: 0.8789 - val_pixelwise_specificity: 0.9559 - val_pixelwise_sensitivity: 0.8957 - val_pixelwise_accuracy: 0.8311
+	b) Mean Dice = 0.9425, Mean jaccard = 0.8934, Thresholded Jaccard = 0.8934 Pixelwise Specificity = 0.9795, Pixelwise Sensitivity = 0.9389, Accuracy = 0.9531
+
+
+
+
 
 
 1. unet  25 epoch, batch_size = 32, adam (lr = 0.0001), loss = bce_jaccard_loss.  ** 0.7339 jaccard_index ** no augment

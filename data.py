@@ -1,5 +1,6 @@
 import tensorflow as tf
 import functools
+import numpy as np
 from config import *  
 
 import tensorflow_addons as tfa
@@ -19,10 +20,6 @@ def process_paths(image_path, mask_path):
     return img, mask_img
 
 
-def rotate_img(image, mask):
-    # image = tf.image.rot90(image, tf.random.uniform(shape=[], minval=0, maxval=4, dtype=tf.int32))
-    # mask = tf.image.rot90(mask, tf.random.uniform(shape=[], minval=0, maxval=4, dtype=tf.int32))
-    return image, mask
 
 def flip_img(image, mask, horizontal_flip = True):
     do_flip = tf.random.uniform([]) > 0.5
@@ -56,10 +53,13 @@ def hue(image):
 
 
 def rot_image(image, mask):
-    k = tf.random.uniform(shape=[], minval=0, maxval=4, dtype=tf.int32)
-    image = tf.image.rot90(image, k)
-    mask = tf.image.rot90(mask, k)
+    angle = tf.random.uniform(shape=[], minval=0, maxval=40 * (np.pi/180) , seed=42)
+    image = tfa.image.rotate(image, angle)
+    mask = tfa.image.rotate(mask, angle)
     return image, mask
+
+def brightness(image):
+    return tf.image.random_brightness(image,BRIGHTNESS_DELTA)
 
 def augment(image, mask, resize=None, scale=1, validate=False):
 
@@ -74,10 +74,14 @@ def augment(image, mask, resize=None, scale=1, validate=False):
         return image,mask
 
     image = hue(image)
+    image = brightness(image)
+
     image, mask = flip_img(image, mask)
     image, mask = flip_img(image, mask, False)
     image, mask = shift_img(image,mask,WIDTH_SHIFT_RANGE, HEIGHT_SHIFT_RANGE)
-    image,mask = rot_image(image, mask)
+    image, mask = rot_image(image,mask)
+
+
    
     return image, mask
 
@@ -89,8 +93,8 @@ def create_dataset(image_paths, mask_paths, preprocess_fn=functools.partial(augm
     dataset = dataset.map(process_paths, num_parallel_calls=AUTOTUNE)
     dataset = dataset.map(preprocess_fn, num_parallel_calls=AUTOTUNE)
 
-    if shuffle:
-        dataset = dataset.shuffle(length)
+    # if shuffle:
+    #     dataset = dataset.shuffle(length)
 
     dataset = dataset.repeat().batch(batch_size)
 
