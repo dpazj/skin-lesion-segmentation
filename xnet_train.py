@@ -6,9 +6,11 @@ import pathlib
 import numpy as np
 import tensorflow as tf
 import keras
+
 from skimage import io
 from skimage import transform
 from keras.preprocessing.image import ImageDataGenerator
+from keras.callbacks import ModelCheckpoint
 
 import segmentation_models as sm
 
@@ -149,8 +151,8 @@ mask_paths = [str(path) for path in mask_paths]
 
 images, masks = load(image_paths, mask_paths)
 
-#images = images[:10]
-#masks = masks[:10]
+# images = images[:10]
+# masks = masks[:10]
 #plot_images(images,masks)
 
 
@@ -176,9 +178,14 @@ adam = tf.keras.optimizers.Adam(learning_rate=INITIAL_LR)
 model = sm.Unet('resnet34', encoder_weights='imagenet', input_shape=SHAPE, classes=1)
 model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
 
+save_path = './models/model1.hdf5'
+checkpoint = ModelCheckpoint(filepath=save_path, monitor='val_jaccard_index', save_best_only=True, verbose=1)
+
+
 model.fit_generator(
     generator=train, 
     steps_per_epoch=int(np.ceil(num_train / float(BATCH_SIZE))),
     epochs=EPOCHS, 
-    validation_data=(x_val, y_val)
+    validation_data=(x_val, y_val),
+    callbacks=[checkpoint]
     )
