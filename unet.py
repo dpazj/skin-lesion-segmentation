@@ -34,9 +34,7 @@ def decoder_block(input_tensor, concat_tensor, num_filters):
   return decoder
 
 
-
-def create_unet_model(img_shape):
-    
+def create_unet_model(img_shape):   
     inputs = layers.Input(shape=img_shape)
     # 256
     encoder0_pool, encoder0 = encoder_block(inputs, 32)
@@ -63,5 +61,7 @@ def create_unet_model(img_shape):
     # 256
     outputs = layers.Conv2D(1, (1, 1), activation='sigmoid')(decoder0)
     model = models.Model(inputs=[inputs], outputs=[outputs])
-
     return model
+
+
+

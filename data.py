@@ -86,17 +86,18 @@ def augment(image, mask, resize=None, scale=1, validate=False):
     return image, mask
 
 
-def create_dataset(image_paths, mask_paths, preprocess_fn=functools.partial(augment), batch_size=3, shuffle=True):
+def create_dataset(image_paths, mask_paths, preprocess_fn=functools.partial(augment), batch_size=3, shuffle=True, batch=True):
     length = len(image_paths)
     dataset = tf.data.Dataset.from_tensor_slices((image_paths, mask_paths))
 
     dataset = dataset.map(process_paths, num_parallel_calls=AUTOTUNE)
     dataset = dataset.map(preprocess_fn, num_parallel_calls=AUTOTUNE)
 
-    # if shuffle:
-    #     dataset = dataset.shuffle(length)
+    if batch:
+        if shuffle:
+            dataset = dataset.shuffle(length)
 
-    dataset = dataset.repeat().batch(batch_size)
+        dataset = dataset.repeat().batch(batch_size)
 
 
     return dataset

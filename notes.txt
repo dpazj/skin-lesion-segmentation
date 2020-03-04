@@ -72,8 +72,12 @@ ARCHITECTURE:
 
 2. UNET VGG Backbone
 
-	a) loss: 0.2780 - jaccard_loss: 0.1792 - jaccard_index: 0.8208 - dice_coeff: 0.9012 - pixelwise_specificity: 0.9701 - pixelwise_sensitivity: 0.9058 - pixelwise_accuracy: 0.8655 - val_loss: 0.3400 - val_jaccard_loss: 0.2153 - val_jaccard_index: 0.7847 - val_dice_coeff: 0.8789 - val_pixelwise_specificity: 0.9559 - val_pixelwise_sensitivity: 0.8957 - val_pixelwise_accuracy: 0.8311
+	a) val_jaccard_loss: 0.2153 - val_jaccard_index: 0.7847 - val_dice_coeff: 0.8789 - val_pixelwise_specificity: 0.9559 - val_pixelwise_sensitivity: 0.8957 - val_pixelwise_accuracy: 0.8311
 	b) Mean Dice = 0.9425, Mean jaccard = 0.8934, Thresholded Jaccard = 0.8934 Pixelwise Specificity = 0.9795, Pixelwise Sensitivity = 0.9389, Accuracy = 0.9531
+
+3. DENSE UNET
+	a) val_loss: 0.4883 - val_jaccard_loss: 0.3052 - val_jaccard_index: 0.6948 - val_dice_coeff: 0.8188 - val_pixelwise_specificity: 0.9180 - val_pixelwise_sensitivity: 0.9155 - val_pixelwise_accuracy: 0.7042
+	b) Mean Dice = 0.9138, Mean jaccard = 0.8547, Thresholded Jaccard = 0.8314 Pixelwise Specificity = 0.9732, Pixelwise Sensitivity = 0.9303, Accuracy = 0.9230
 
 
 

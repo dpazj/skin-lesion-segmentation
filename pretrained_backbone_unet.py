@@ -140,6 +140,7 @@ def create_vgg16_unet(img_shape):
 
     encoder_features = ('block5_conv3', 'block4_conv3', 'block3_conv3', 'block2_conv2', 'block1_conv2') #skip_connection_layers
     decoder_filters = (256, 128, 64, 32, 16)
+    skip_connections = ('block5_conv3', 'block4_conv3', 'block3_conv3', 'block2_conv2', 'block1_conv2','block5_pool', 'block4_pool', 'block3_pool', 'block2_pool', 'block1_pool',)
 
     inputs = vgg16.input
     x = vgg16.output
