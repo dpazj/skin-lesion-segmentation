@@ -17,6 +17,7 @@ import segmentation_models as sm
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+from UNetPlusPlus.segmentation_models import Xnet
 
 from sklearn.model_selection import train_test_split
 from data import * 
@@ -55,12 +56,7 @@ def partition_data(x, y, k=5, i=0, test_split=0., seed=42):
 
 def load_image_by_pathname(image_path, mask=False):
     
-    #image = io.imread(image_path)
-    
-    
-
     if mask:
-        #image = image.split()[0]
         image = tf.keras.preprocessing.image.load_img(image_path, target_size=(SHAPE[0], SHAPE[0]), color_mode="grayscale")
         image = np.array(image) 
         image = np.expand_dims(image,axis=-1)
@@ -68,13 +64,6 @@ def load_image_by_pathname(image_path, mask=False):
         image = tf.keras.preprocessing.image.load_img(image_path, target_size=(SHAPE[0], SHAPE[0]))
         image = np.array(image) 
 
-
-        
-    # image = transform.resize(image, (SHAPE[0], SHAPE[0]),
-    #                             order=1, mode='constant',
-    #                             cval=0, clip=True,
-    #                             preserve_range=True,
-    #                             anti_aliasing=True)
     image = image.astype(np.uint8)
 
     return image
@@ -151,8 +140,8 @@ mask_paths = [str(path) for path in mask_paths]
 
 images, masks = load(image_paths, mask_paths)
 
-# images = images[:10]
-# masks = masks[:10]
+images = images[:10]
+masks = masks[:10]
 #plot_images(images,masks)
 
 
@@ -175,17 +164,58 @@ y = mask_gen.flow(x=y_train, batch_size=BATCH_SIZE, seed=seed)
 train = zip(x,y)
 
 adam = tf.keras.optimizers.Adam(learning_rate=INITIAL_LR)
-model = sm.Unet('resnet34', encoder_weights='imagenet', input_shape=SHAPE, classes=1)
+
+#UNET RESENT BACKBONE
+#model = sm.Unet('resnet34', encoder_weights='imagenet', input_shape=SHAPE, classes=1)
+
+#UNETPP
+model = Xnet(backbone_name='resnet50', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+
 model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
 
 save_path = './models/model1.hdf5'
 checkpoint = ModelCheckpoint(filepath=save_path, monitor='val_jaccard_index', save_best_only=True, verbose=1)
 
 
-model.fit_generator(
+history = model.fit_generator(
     generator=train, 
     steps_per_epoch=int(np.ceil(num_train / float(BATCH_SIZE))),
     epochs=EPOCHS, 
     validation_data=(x_val, y_val),
     callbacks=[checkpoint]
     )
+
+jaccard = history.history['jaccard_index']
+val_jaccard = history.history['val_jaccard_index']
+
+dice = history.history['dice_coeff']
+val_dice = history.history['val_dice_coeff']
+
+
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs_range = range(EPOCHS)
+
+plt.figure(figsize=(16, 8))
+
+plt.subplot(2, 2, 1)
+plt.plot(epochs_range, jaccard, label='Training Jaccard Loss')
+plt.plot(epochs_range, val_jaccard, label='Validation Jaccard Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Jaccard Index')
+
+plt.subplot(2, 2, 2)
+plt.plot(epochs_range, loss, label='Training Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+
+
+plt.subplot(2, 2, 3)
+plt.plot(epochs_range, dice, label='Training Dice Coeff')
+plt.plot(epochs_range, val_dice, label='Validation Dice Coeff')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Dice Loss')
+
+plt.savefig('training_loss.png')

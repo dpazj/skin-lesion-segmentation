@@ -12,7 +12,7 @@ from config import *
 from metrics import * 
 from pretrained_backbone_unet import * 
 
-MODEL_PATH = "./models/DENSE_UNET.hdf5"
+MODEL_PATH = "./models/RESNET.hdf5"
 
 
 def post_process(predictions):
