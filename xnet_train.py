@@ -26,35 +26,6 @@ from config import *
 from metrics import * 
 
 
-
-def partition_data(x, y, k=5, i=0, test_split=0., seed=42):
-    
-    n = x.shape[0]
-
-    n_set = int(n * (1. - test_split)) // k
-    # divide the data into (k + 1) sets, -1 is test set, [0, k) are for train and validation
-    indices = np.array([i for i in range(k) for _ in range(n_set)] +
-                       [-1] * (n - n_set * k),
-                       dtype=np.int8)
-
-    np.random.seed(seed)
-    np.random.shuffle(indices)
-
-    valid_indices = (indices == i)
-    test_indices = (indices == -1)
-    train_indices = ~(valid_indices | test_indices)
-
-    x_valid = x[valid_indices]
-    y_valid = y[valid_indices]
-
-    x_train = x[train_indices]
-    y_train = y[train_indices]
-
-    x_test = x[test_indices]
-    y_test = y[test_indices]
-
-    return (x_train, y_train), (x_valid, y_valid), (x_test, y_test)
-
 def load_image_by_pathname(image_path, mask=False):
     
     if mask:
@@ -171,7 +142,7 @@ adam = optimizers.Adam(lr=INITIAL_LR * 0.1)
 #UNETPP
 #model = Xnet(backbone_name='vgg16', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
-model = Nestnet(backbone_name='resnet50', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+model = Nestnet(backbone_name='vgg16', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
 model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
 

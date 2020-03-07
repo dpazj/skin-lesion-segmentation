@@ -102,11 +102,15 @@ ARCHITECTURE:
 	a) val_loss: 0.3552 - val_jaccard_loss: 0.2093 - val_jaccard_index: 0.7907 - val_dice_coeff: 0.8754 - val_pixelwise_specificity: 0.9676 - val_pixelwise_sensitivity: 0.8732 - val_pixelwise_accuracy: 0.8858
 	b) **NEEDS TO BE DONE WHEN I UPGRADE TF BACK TO 2.1
 
-9. UNET++ vgg16 Backbone (bce batch_size = 8) learning rate set to 0.00001 60 epoch
+9. UNET++ vgg16 Backbone (bce, batch_size = 8) learning rate set to 0.00001 60 epoch
 	a) val_loss: 0.1271 - val_jaccard_loss: 0.2247 - val_jaccard_index: 0.7753 - val_dice_coeff: 0.8666 - val_pixelwise_specificity: 0.9733 - val_pixelwise_sensitivity: 0.8572 - val_pixelwise_accuracy: 0.8811
 	b)
 
-10. NestedUNET vgg16 Backbone (bce batch_size = 8) learning rate set to 0.00001 60 epoch
+10. NestedUNET resnet50 Backbone (bce, batch_size = 8) learning rate set to 0.00001 60 epoch
+	a) val_loss: 0.1252 - val_jaccard_loss: 0.2235 - val_jaccard_index: 0.7765 - val_dice_coeff: 0.8668 - val_pixelwise_specificity: 0.9618 - val_pixelwise_sensitivity: 0.8697 - val_pixelwise_accuracy: 0.8721
+	b)
+
+10. NestedUNET vgg16 Backbone (bce, batch_size = 8) learning rate set to 0.00001 60 epoch
 	a) val_loss: 0.1252 - val_jaccard_loss: 0.2235 - val_jaccard_index: 0.7765 - val_dice_coeff: 0.8668 - val_pixelwise_specificity: 0.9618 - val_pixelwise_sensitivity: 0.8697 - val_pixelwise_accuracy: 0.8721
 	b)
 
