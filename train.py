@@ -152,5 +152,5 @@ plt.plot(epochs_range, val_dice, label='Validation Dice Coeff')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Dice Loss')
 
-plt.savefig('training_loss.png')
+plt.savefig('train-img/training_loss.png')
 

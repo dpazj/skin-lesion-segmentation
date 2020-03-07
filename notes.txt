@@ -6,9 +6,12 @@ https://github.com/lucasb-eyer/pydensecrf - CRF
 https://s3.amazonaws.com/covalic-prod-assetstore/4e/83/4e83610ac0a14abf88e47789b66243f0?response-content-disposition=inline%3B%20filename%3D%221807.04893.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200229%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200229T224124Z&X-Amz-Signature=947f8925d7deaf8ce175216380d197f1502675ffa5800a163de139f0ff7b72f1
 
 https://s3.amazonaws.com/covalic-prod-assetstore/c1/ca/c1ca850e6bbb40789ff946ecac0fd559?response-content-disposition=inline%3B%20filename%3D%22NavidAlemiKoohbanani_ISIC2018report.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200302%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200302T170502Z&X-Amz-Signature=bf013ce5e5769cc286fdb86db002ff84058147f08a7bfd025ffea47edc07b345
--- why my custom loss function is ok
+--  custom loss function 
 
-https://arxiv.org/pdf/1412.7062.pdf
+https://s3.amazonaws.com/covalic-prod-assetstore/f6/d1/f6d130358ed54a8e980b638bbac60ed0?response-content-disposition=inline%3B%20filename%3D%22manuscript.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200306%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200306T094626Z&X-Amz-Signature=81dffa2f35f2bfc5bf6b1c13b1932402457795abf78811fa378a88c85daf6edb
+-UoD submission
+
+https://arxiv.org/pdf/1412.7062.pdf - SEMANTIC IMAGE SEGMENTATION WITH DEEP CONVOLUTIONAL NETS AND FULLY CONNECTED CRFS
 
 
 
@@ -65,29 +68,51 @@ CUSTOM LOSS FUNCTION
 
 ARCHITECTURE:
 
-1. UNET
+1. UNET - (jaccard)
 
 	a) val_loss: 0.4037 - val_jaccard_loss: 0.2623 - val_jaccard_index: 0.7377 - val_dice_coeff: 0.8487 - val_pixelwise_specificity: 0.9509 - val_pixelwise_sensitivity: 0.8922 - val_pixelwise_accuracy: 0.7476
 	b) Mean Dice = 0.9169, Mean jaccard = 0.8577, Thresholded Jaccard = 0.8441 Pixelwise Specificity = 0.9841, Pixelwise Sensitivity = 0.9009, Accuracy = 0.9551
 
-2. UNET VGG Backbone
+2. UNET VGG Backbone - (jaccard)
 
 	a) val_jaccard_loss: 0.2153 - val_jaccard_index: 0.7847 - val_dice_coeff: 0.8789 - val_pixelwise_specificity: 0.9559 - val_pixelwise_sensitivity: 0.8957 - val_pixelwise_accuracy: 0.8311
 	b) Mean Dice = 0.9425, Mean jaccard = 0.8934, Thresholded Jaccard = 0.8934 Pixelwise Specificity = 0.9795, Pixelwise Sensitivity = 0.9389, Accuracy = 0.9531
 
-3. UNET RESNET Backbone
+3. UNET RESNET 34 Backbone (bce)
 	a) val_loss: 0.1201 - val_jaccard_loss: 0.2286 - val_jaccard_index: 0.7714 - val_dice_coeff: 0.8692 - val_pixelwise_specificity: 0.9685 - val_pixelwise_sensitivity: 0.8535 - val_pixelwise_accuracy: 0.8668
 	b) Mean Dice = 0.9313, Mean jaccard = 0.8783, Thresholded Jaccard = 0.8573 Pixelwise Specificity = 0.9672, Pixelwise Sensitivity = 0.9515, Accuracy = 0.9260
 
+4. UNET++ resnet 50 Backbone (bce) - training was unstable - see XNET-RES50-UNSTABLE.png - Learning rate was 0.0001 so i decreased it to 0.00001 to see if that would stabalise training
+	a) val_loss: 0.1245 - val_jaccard_loss: 0.2260 - val_jaccard_index: 0.7740 - val_dice_coeff: 0.8662 - val_pixelwise_specificity: 0.9678 - val_pixelwise_sensitivity: 0.8591 - val_pixelwise_accuracy: 0.8744
+	b) **NEEDS TO BE DONE WHEN I UPGRADE TF BACK TO 2.1
+
+5. UNET++ resnet 50 Backbone (bce + jaccard loss) learning rate set to 0.00001 - Much more stable training 30 epoch
+	a) val_loss: 0.3723 - val_jaccard_loss: 0.2366 - val_jaccard_index: 0.7634 - val_dice_coeff: 0.8584 - val_pixelwise_specificity: 0.9587 - val_pixelwise_sensitivity: 0.8757 - val_pixelwise_accuracy: 0.8216
+	b) **NEEDS TO BE DONE WHEN I UPGRADE TF BACK TO 2.1
+
+6. UNET++ resnet 50 Backbone (bce) learning rate set to 0.00001 - Much more stable training 40 epoch
+	a) val_loss: 0.1138 - val_jaccard_loss: 0.2581 - val_jaccard_index: 0.7419 - val_dice_coeff: 0.8444 - val_pixelwise_specificity: 0.9530 - val_pixelwise_sensitivity: 0.8704 - val_pixelwise_accuracy: 0.8022
+	b) **NEEDS TO BE DONE WHEN I UPGRADE TF BACK TO 2.1
+
+7. UNET++ resnet 50 Backbone (bce + jaccard) learning rate set to 0.00001 - Much more stable training 40 epoch
+	a) val_loss: 0.3721 - val_jaccard_loss: 0.2282 - val_jaccard_index: 0.7718 - val_dice_coeff: 0.8631 - val_pixelwise_specificity: 0.9595 - val_pixelwise_sensitivity: 0.8797 - val_pixelwise_accuracy: 0.8456
+	b) **NEEDS TO BE DONE WHEN I UPGRADE TF BACK TO 2.1
+
+8. UNET++ resnet 50 Backbone (bce + jaccard) learning rate set to 0.00001 - training 60 epoch
+	a) val_loss: 0.3552 - val_jaccard_loss: 0.2093 - val_jaccard_index: 0.7907 - val_dice_coeff: 0.8754 - val_pixelwise_specificity: 0.9676 - val_pixelwise_sensitivity: 0.8732 - val_pixelwise_accuracy: 0.8858
+	b) **NEEDS TO BE DONE WHEN I UPGRADE TF BACK TO 2.1
+
+9. UNET++ vgg16 Backbone (bce batch_size = 8) learning rate set to 0.00001 60 epoch
+	a) val_loss: 0.1271 - val_jaccard_loss: 0.2247 - val_jaccard_index: 0.7753 - val_dice_coeff: 0.8666 - val_pixelwise_specificity: 0.9733 - val_pixelwise_sensitivity: 0.8572 - val_pixelwise_accuracy: 0.8811
+	b)
+
+10. NestedUNET vgg16 Backbone (bce batch_size = 8) learning rate set to 0.00001 60 epoch
+	a) val_loss: 0.1252 - val_jaccard_loss: 0.2235 - val_jaccard_index: 0.7765 - val_dice_coeff: 0.8668 - val_pixelwise_specificity: 0.9618 - val_pixelwise_sensitivity: 0.8697 - val_pixelwise_accuracy: 0.8721
+	b)
 
 
-
-
-
-1. unet  25 epoch, batch_size = 32, adam (lr = 0.0001), loss = bce_jaccard_loss.  ** 0.7339 jaccard_index ** no augment
-2. unet  25 epoch, batch_size = 32, adam (lr = 0.0001), loss = bce_dice_loss.  ** 0.7266 jaccard_index ** no augment
-3. unet  25 epoch, batch_size = 32, adam (lr = 0.0001), loss = bce. 		 ** 0.7055 jaccard_index ** no augment
-
+todo:
+https://github.com/nickhitsai/LinkNet-Keras/blob/master/linknet.py
 
 
 

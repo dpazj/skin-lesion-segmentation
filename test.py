@@ -1,18 +1,16 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-from tensorflow_examples.models.pix2pix import pix2pix
 
 import pathlib
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-from data import * 
 from unet import * 
 from config import * 
 from metrics import * 
-from pretrained_backbone_unet import * 
+#from pretrained_backbone_unet import * 
 
-MODEL_PATH = "./models/RESNET.hdf5"
+MODEL_PATH = "./models/UNETPP-RES50.hdf5"
 
 
 def post_process(predictions):
@@ -46,6 +44,31 @@ def pix_accuracy(y_true, y_pred):
   true = np.sum(y_true * y_pred)
   total = np.sum(y_pred)
   return true/total
+
+
+def process_paths(image_path, mask_path):
+  image_str = tf.io.read_file(image_path)
+  img = tf.image.decode_jpeg(image_str, channels = 3)
+
+  mask_str = tf.io.read_file(mask_path)
+  mask_img = tf.image.decode_png(mask_str)
+  mask_img = mask_img[:,:,0]
+  mask_img = tf.expand_dims(mask_img, axis=-1)
+  return img, mask_img
+
+def augment(image, mask, resize=None, scale=1, validate=False):
+
+    if resize is not None:
+        image = tf.image.resize(image, resize)
+        mask = tf.image.resize(mask, resize)
+
+    image = tf.dtypes.cast(image, tf.float32) * scale
+    mask = tf.dtypes.cast(mask, tf.float32) * scale 
+
+    
+    return image,mask
+
+   
 
 image_dir = pathlib.Path("../Data/ISIC2018/VAL/input")
 image_paths = list(image_dir.glob('*.jpg'))

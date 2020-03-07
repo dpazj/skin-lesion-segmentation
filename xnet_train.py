@@ -12,18 +12,19 @@ from skimage import transform
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint
 
-import segmentation_models as sm
+from keras import optimizers
+
+#import segmentation_models as sm
 
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-from UNetPlusPlus.segmentation_models import Xnet
+from UNetPlusPlus.segmentation_models import Xnet, Nestnet
 
 from sklearn.model_selection import train_test_split
-from data import * 
 from config import * 
 from metrics import * 
-from pretrained_backbone_unet import * 
+
 
 
 def partition_data(x, y, k=5, i=0, test_split=0., seed=42):
@@ -140,8 +141,6 @@ mask_paths = [str(path) for path in mask_paths]
 
 images, masks = load(image_paths, mask_paths)
 
-images = images[:10]
-masks = masks[:10]
 #plot_images(images,masks)
 
 
@@ -163,13 +162,16 @@ y = mask_gen.flow(x=y_train, batch_size=BATCH_SIZE, seed=seed)
 
 train = zip(x,y)
 
-adam = tf.keras.optimizers.Adam(learning_rate=INITIAL_LR)
+adam = optimizers.Adam(lr=INITIAL_LR * 0.1)
 
 #UNET RESENT BACKBONE
 #model = sm.Unet('resnet34', encoder_weights='imagenet', input_shape=SHAPE, classes=1)
 
+#model = Xnet(backbone_name='resnet50', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 #UNETPP
-model = Xnet(backbone_name='resnet50', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+#model = Xnet(backbone_name='vgg16', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+
+model = Nestnet(backbone_name='resnet50', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
 model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
 
@@ -218,4 +220,4 @@ plt.plot(epochs_range, val_dice, label='Validation Dice Coeff')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Dice Loss')
 
-plt.savefig('training_loss.png')
+plt.savefig('train-img/training_loss.png')
