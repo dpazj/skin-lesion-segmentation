@@ -108,8 +108,6 @@ mask_paths = list(mask_dir.glob('*.png'))
 mask_paths = [str(path) for path in mask_paths]
 
 
-
-
 images, masks = load(image_paths, mask_paths)
 
 #plot_images(images,masks)
@@ -144,7 +142,7 @@ adam = optimizers.Adam(lr=INITIAL_LR * 0.1)
 
 model = Nestnet(backbone_name='vgg16', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
-model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
+model.compile(optimizer=adam, loss=bce_jaccard_loss, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
 
 save_path = './models/model1.hdf5'
 checkpoint = ModelCheckpoint(filepath=save_path, monitor='val_jaccard_index', save_best_only=True, verbose=1)

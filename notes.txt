@@ -110,10 +110,13 @@ ARCHITECTURE:
 	a) val_loss: 0.1252 - val_jaccard_loss: 0.2235 - val_jaccard_index: 0.7765 - val_dice_coeff: 0.8668 - val_pixelwise_specificity: 0.9618 - val_pixelwise_sensitivity: 0.8697 - val_pixelwise_accuracy: 0.8721
 	b)
 
-10. NestedUNET vgg16 Backbone (bce, batch_size = 8) learning rate set to 0.00001 60 epoch
-	a) val_loss: 0.1252 - val_jaccard_loss: 0.2235 - val_jaccard_index: 0.7765 - val_dice_coeff: 0.8668 - val_pixelwise_specificity: 0.9618 - val_pixelwise_sensitivity: 0.8697 - val_pixelwise_accuracy: 0.8721
+11. NestedUNET vgg16 Backbone (bce, batch_size = 8) learning rate set to 0.00001 60 epoch
+	a) val_loss: 0.1235 - val_jaccard_loss: 0.2199 - val_jaccard_index: 0.7801 - val_dice_coeff: 0.8696 - val_pixelwise_specificity: 0.9711 - val_pixelwise_sensitivity: 0.8727 - val_pixelwise_accuracy: 0.8717
 	b)
 
+12. NestedUNET vgg16 Backbone (bce + jaccard, batch_size = 8) learning rate set to 0.00001 60 epoch
+	a) val_loss: 0.3474 - val_jaccard_loss: 0.1993 - val_jaccard_index: 0.8007 - val_dice_coeff: 0.8823 - val_pixelwise_specificity: 0.9625 - val_pixelwise_sensitivity: 0.9047 - val_pixelwise_accuracy: 0.8733
+	b)
 
 todo:
 https://github.com/nickhitsai/LinkNet-Keras/blob/master/linknet.py
@@ -121,5 +124,56 @@ https://github.com/nickhitsai/LinkNet-Keras/blob/master/linknet.py
 
 
 
+ENSEMBLES:
+
+1. 2, 3, 8, 9, 10, 11, 12: 0.5 binary Threshold
+	SCORE 0.752
+	Jaccard Index	0.803
+	Dice Coefficient 	0.881
+	Accuracy	0.933
+	Sensitivity 	0.940
+	Specificity	0.936
+
+2. 2, 3, 8, 9, 10, 11, 12: 0.6 binary Threshold
+	Threshold Jaccard Index	0.760
+	Jaccard Index	0.812
+	Dice Coefficient 	0.886
+	Accuracy	0.935
+	Sensitivity 	0.931
+	Specificity	0.945
+
+3. 2, 3, 8, 9, 10, 11, 12: 0.65 binary Threshold
+	Threshold Jaccard Index	0.765
+	Jaccard Index	0.815
+	Dice Coefficient 	0.888
+	Accuracy	0.936
+	Sensitivity 	0.926
+	Specificity	0.950
+
+4. 2, 3, 8, 9, 10, 11, 12: 0.65 binary Threshold + gausian filter @ 2.0
+	Threshold Jaccard Index	0.770
+	Jaccard Index	0.818
+	Dice Coefficient 	0.889
+	Accuracy	0.937
+	Sensitivity 	0.923
+	Specificity	0.951
+
+5. 2, 3, 8, 9, 10, 11, 12: 0.7 binary Threshold + gausian filter @ 2.0
+	Threshold Jaccard Index	0.778
+	Jaccard Index	0.822
+	Dice Coefficient 	0.891
+	Accuracy	0.937
+	Sensitivity 	0.916
+	Specificity	0.957
+
+6. 2, 3, 8, 9, 10, 11, 12: 0.75 binary Threshold + gausian filter @ 2.0
 
 
+
+8, 9, 10, 11, 12:
+  	Threshold Jaccard Index 0.745
+	Jaccard Index	0.798
+	Dice Coefficient 	0.877
+	Accuracy	0.930
+	Sensitivity 	0.933
+	Specificity	0.936
