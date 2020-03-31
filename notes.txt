@@ -1,20 +1,10 @@
 https://github.com/ternaus/TernausNet
 
-https://s3.amazonaws.com/covalic-prod-assetstore/0e/28/0e28afd89eb843c3ab47ee8a203972db?response-content-disposition=inline%3B%20filename%3D%22ISIC_2018.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200302%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200302T104039Z&X-Amz-Signature=77cbc4be2ef48e21983aecbbaad67596b40ccaa4ea1f8a9f4f8d0156f1579ed6
-
-https://github.com/lucasb-eyer/pydensecrf - CRF
-https://s3.amazonaws.com/covalic-prod-assetstore/4e/83/4e83610ac0a14abf88e47789b66243f0?response-content-disposition=inline%3B%20filename%3D%221807.04893.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200229%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200229T224124Z&X-Amz-Signature=947f8925d7deaf8ce175216380d197f1502675ffa5800a163de139f0ff7b72f1
-
-https://s3.amazonaws.com/covalic-prod-assetstore/c1/ca/c1ca850e6bbb40789ff946ecac0fd559?response-content-disposition=inline%3B%20filename%3D%22NavidAlemiKoohbanani_ISIC2018report.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200302%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200302T170502Z&X-Amz-Signature=bf013ce5e5769cc286fdb86db002ff84058147f08a7bfd025ffea47edc07b345
---  custom loss function 
-
-https://s3.amazonaws.com/covalic-prod-assetstore/f6/d1/f6d130358ed54a8e980b638bbac60ed0?response-content-disposition=inline%3B%20filename%3D%22manuscript.pdf%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=3600&X-Amz-Credential=AKIAITHBL3CJMECU3C4A%2F20200306%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20200306T094626Z&X-Amz-Signature=81dffa2f35f2bfc5bf6b1c13b1932402457795abf78811fa378a88c85daf6edb
--UoD submission
 
 https://arxiv.org/pdf/1412.7062.pdf - SEMANTIC IMAGE SEGMENTATION WITH DEEP CONVOLUTIONAL NETS AND FULLY CONNECTED CRFS
 
-
-
+http://fse.studenttheses.ub.rug.nl/18139/1/AI_BA_2018_FlorisvanBeers.pdf - IoU "After testing it is found that training directly on IoU significantly increases performance vs Binary Cross Entropy loss."
+https://arxiv.org/pdf/1801.05173.pdf -  dual loss function whose weighting scheme allows to combine advantages of cross-entropy and dice loss.
 
 
 
@@ -166,8 +156,9 @@ ENSEMBLES:
 	Sensitivity 	0.916
 	Specificity	0.957
 
-6. 2, 3, 8, 9, 10, 11, 12: 0.75 binary Threshold + gausian filter @ 2.0
 
+7. 2, 3, 8, 9, 10, 11, 12: CRF 
+	0.757
 
 
 8, 9, 10, 11, 12:

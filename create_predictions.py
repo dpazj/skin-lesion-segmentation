@@ -59,16 +59,24 @@ def load(image_paths):
 
     images = []
     sizes = []
-    if os.path.exists("npsave/images_test.npy") and os.path.exists("npsave/images_test_sizes.npy"):
-        images = np.load('npsave/images_test.npy')
-        sizes = np.load('npsave/images_test_sizes.npy')
+
+    #1000 images
+    nppathim = 'npsave/images_test.npy'
+    nppathsizes = 'npsave/images_test_sizes.npy'
+
+    #10 tes images
+    # nppathim = 'npsave/images_testT.npy'
+    # nppathsizes = 'npsave/images_test_sizesT.npy'
+
+    if os.path.exists(nppathim) and os.path.exists("npsave/images_test_sizes.npy"):
+        images = np.load(nppathim)
+        sizes = np.load(nppathsizes)
     else:
         images, sizes = load_images(image_paths)
         images = np.stack(images).astype(np.uint8)
 
-        
-        np.save('npsave/images_test.npy', images)
-        np.save('npsave/images_test_sizes.npy', sizes)
+        np.save(nppathim, images)
+        np.save(nppathsizes, sizes)
 
 
     images = images * SCALE
@@ -121,7 +129,8 @@ print("Post Processing")
 
 #predictions = post_process_crf(predictions, images)
 
-predictions = post_process_mask(predictions)
+
+predictions = post_process_mask(predictions, 1.)
 
 
 if not os.path.exists(OUTPUT_DIR):
@@ -140,7 +149,7 @@ for i_image, path in enumerate(image_paths):
 
     resized_pred = resize(current_pred, output_shape=sizes[i_image],preserve_range=True,mode='reflect', anti_aliasing=True)
 
-    threshold = 0.75 * 255
+    threshold = 0.70 * 255
     resized_pred[resized_pred > threshold] = 255
     resized_pred[resized_pred <= threshold] = 0
 

@@ -1,0 +1,22 @@
+
+
+ARCHITECTURE - w/BCE loss function
+
+1. NESTNET - VGG16 
+2. NESTNET - ResNet50 
+3. NESTNET - ResNet101 
+    3.1 100 epoch
+4. NESTNET - VGG19
+5. Xnet - VGG16
+6. Xnet - ResNet50
+7. Xnet - ResNet101
+8. Xnet - VGG19
+9. NESTNET - RESNET150
+10. Xnet - RESNET150
+
+
+LOSS function
+
+1. BCE_JACCARD
+
+

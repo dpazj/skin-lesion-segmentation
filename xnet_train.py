@@ -29,11 +29,11 @@ from metrics import *
 def load_image_by_pathname(image_path, mask=False):
     
     if mask:
-        image = tf.keras.preprocessing.image.load_img(image_path, target_size=(SHAPE[0], SHAPE[0]), color_mode="grayscale")
+        image = keras.preprocessing.image.load_img(image_path, target_size=(SHAPE[0], SHAPE[0]), color_mode="grayscale")
         image = np.array(image) 
         image = np.expand_dims(image,axis=-1)
     else:
-        image = tf.keras.preprocessing.image.load_img(image_path, target_size=(SHAPE[0], SHAPE[0]))
+        image = keras.preprocessing.image.load_img(image_path, target_size=(SHAPE[0], SHAPE[0]))
         image = np.array(image) 
 
     image = image.astype(np.uint8)
@@ -95,8 +95,6 @@ def plot_images(a, b):
     
       
     
-
-
 #images
 image_dir = pathlib.Path("../Data/ISIC2018/Training/ISIC2018_Task1-2_Training_Input")
 image_paths = list(image_dir.glob('*.jpg'))
@@ -138,13 +136,14 @@ adam = optimizers.Adam(lr=INITIAL_LR * 0.1)
 
 #model = Xnet(backbone_name='resnet50', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 #UNETPP
-#model = Xnet(backbone_name='vgg16', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
-model = Nestnet(backbone_name='vgg16', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+model = Xnet(backbone_name='resnet152', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
-model.compile(optimizer=adam, loss=bce_jaccard_loss, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
+#model = Nestnet(backbone_name='resnet152', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
-save_path = './models/model1.hdf5'
+model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
+
+save_path = './experiment_models/model1.hdf5'
 checkpoint = ModelCheckpoint(filepath=save_path, monitor='val_jaccard_index', save_best_only=True, verbose=1)
 
 

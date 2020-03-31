@@ -6,13 +6,14 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 from pydensecrf import densecrf as dcrf
-from pydensecrf.utils import unary_from_softmax
+from pydensecrf.utils import unary_from_softmax, unary_from_labels
 from scipy.ndimage.filters import gaussian_filter
-
+from tqdm import tqdm
 
 
 def post_process_mask(predictions, gaussian_sigma=2.0):
-    for x in range(predictions.shape[0]):
+    #for x in range(predictions.shape[0]):
+    for x in range(len(predictions)):
         predictions[x] = gaussian_filter(input=predictions[x], sigma=gaussian_sigma)
     return predictions
 
@@ -20,11 +21,16 @@ def post_process_mask(predictions, gaussian_sigma=2.0):
 
 def post_process_crf(predictions,base_images):
 
+    #TODO CREATE FROM LABELS
+
     new_predictions = []
+
+
 
     images = base_images * 255
 
-    for prediction, base in zip(predictions, images):
+    for prediction, base in tqdm(zip(predictions, images)):
+        
 
         base = base.astype(np.uint8)
         
@@ -32,26 +38,14 @@ def post_process_crf(predictions,base_images):
         d = dcrf.DenseCRF2D(SHAPE[0], SHAPE[1], 2)
 
     
-        probs = np.stack([prediction, 1-prediction])
-
-      
-        # plt.imshow(probs[0])
-        # plt.show()
-
-        # plt.imshow(base)
-        # plt.show()
-
-
-        unary = unary_from_softmax(probs, scale=1.0)
+        probs = np.stack([1-prediction, prediction])
+        unary = unary_from_softmax(probs)
         
-
+       
         d.setUnaryEnergy(unary)
-
         
-        d.addPairwiseGaussian(sxy=10, compat=10)
-        
-        
-        d.addPairwiseBilateral(sxy=100, srgb=100, rgbim=base, compat=1)
+        d.addPairwiseGaussian(sxy=1, compat=1)
+        d.addPairwiseBilateral(sxy=5, srgb=1, rgbim=base, compat=1)
 
         Q = d.inference(10)
 

@@ -34,11 +34,14 @@ def decoder_block(input_tensor, concat_tensor, num_filters):
   return decoder
 
 
-def create_unet_model(img_shape):   
-    inputs = layers.Input(shape=img_shape)
 
+def create_unet_model(img_shape):
+    
+    inputs = layers.Input(shape=img_shape)
+    # 256
+    encoder0_pool, encoder0 = encoder_block(inputs, 32)
     # 128
-    encoder1_pool, encoder1 = encoder_block(inputs, 64)
+    encoder1_pool, encoder1 = encoder_block(encoder0_pool, 64)
     # 64
     encoder2_pool, encoder2 = encoder_block(encoder1_pool, 128)
     # 32
@@ -56,10 +59,9 @@ def create_unet_model(img_shape):
     # 64
     decoder1 = decoder_block(decoder2, encoder1, 64)
     # 128
+    decoder0 = decoder_block(decoder1, encoder0, 32)
     # 256
-    outputs = layers.Conv2D(1, (1, 1), activation='sigmoid')(decoder1)
+    outputs = layers.Conv2D(1, (1, 1), activation='sigmoid')(decoder0)
     model = models.Model(inputs=[inputs], outputs=[outputs])
+
     return model
-
-
-
