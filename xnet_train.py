@@ -129,17 +129,12 @@ y = mask_gen.flow(x=y_train, batch_size=BATCH_SIZE, seed=seed)
 
 train = zip(x,y)
 
-adam = optimizers.Adam(lr=INITIAL_LR * 0.1)
+adam = optimizers.Adam(lr=INITIAL_LR)
 
 #UNET RESENT BACKBONE
-#model = sm.Unet('resnet34', encoder_weights='imagenet', input_shape=SHAPE, classes=1)
 
-#model = Xnet(backbone_name='resnet50', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
-#UNETPP
-
-model = Xnet(backbone_name='resnet152', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
-
-#model = Nestnet(backbone_name='resnet152', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+#model = Xnet(backbone_name='vgg19', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+model = Nestnet(backbone_name='vgg19', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
 model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
 

@@ -2,21 +2,34 @@
 
 ARCHITECTURE - w/BCE loss function
 
-1. NESTNET - VGG16 
+1. NESTNET - VGG16 - Mean Dice = 0.8921, Mean jaccard = 0.8236, Pixelwise Specificity = 0.9697, Pixelwise Sensitivity = 0.9080, Accuracy = 0.9609
 2. NESTNET - ResNet50 
 3. NESTNET - ResNet101 
     3.1 100 epoch
-4. NESTNET - VGG19
+4. NESTNET - VGG19 - redo
 5. Xnet - VGG16
 6. Xnet - ResNet50
 7. Xnet - ResNet101
-8. Xnet - VGG19
+8. Xnet - VGG19 
 9. NESTNET - RESNET150
 10. Xnet - RESNET150
 
+u1. Unet - resnet34
+u2. Unet - vgg16
+u3. Unet - resnet50
+u4. Unet - resnet101
+u5. Unet - resnet151
 
-LOSS function
 
-1. BCE_JACCARD
+
+LOSS function (unet, lr = 0.00001, 150 epoch)
+
+1. BCE - Mean Dice = 0.8774, Mean jaccard = 0.8023, Pixelwise Specificity = 0.9789, Pixelwise Sensitivity = 0.8632, Accuracy = 0.9543
+2. JACCARD - Mean Dice = 0.8812, Mean jaccard = 0.8093, Pixelwise Specificity = 0.9709, Pixelwise Sensitivity = 0.8993, Accuracy = 0.9553
+3. DICE - Mean Dice = 0.8772, Mean jaccard = 0.8034, Pixelwise Specificity = 0.9607, Pixelwise Sensitivity = 0.9220, Accuracy = 0.9529
+4. BCE_JACCARD a = 1 b = 1:  0.8773, Mean jaccard = 0.8030, Pixelwise Specificity = 0.9676, Pixelwise Sensitivity = 0.9117, Accuracy = 0.9570
+5. BCE_JACCARD a = 0.4 b = 0.6: Mean Dice = 0.8777, Mean jaccard = 0.8054, Pixelwise Specificity = 0.9638, Pixelwise Sensitivity = 0.9090, Accuracy = 0.9549
+6. BCE_JACCARD a = 0.6 b = 0.4: Mean Dice = 0.8850, Mean jaccard = 0.8130, Pixelwise Specificity = 0.9691, Pixelwise Sensitivity = 0.9088, Accuracy = 0.9567
+
 
 

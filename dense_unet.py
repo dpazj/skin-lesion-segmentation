@@ -39,10 +39,8 @@ def create_dense_unet(img_size):
     # conv1 = layers.Activation('relu')(conv1)
 
 
-    conv1 = DenseBlock(inputs, 32)  # 48
-    pool1 = layers.MaxPooling2D(pool_size=(2, 2))(conv1)
 
-    conv2 = DenseBlock(pool1, 64)  # 24
+    conv2 = DenseBlock(inputs, 64)  # 24
     pool2 = layers.MaxPooling2D(pool_size=(2, 2))(conv2)
 
     conv3 = DenseBlock(pool2, 128)  # 12
@@ -72,13 +70,7 @@ def create_dense_unet(img_size):
     up4 = layers.concatenate([up4, conv2], axis=-1)
     conv8 = DenseBlock(up4, 64)
 
-    up5 = layers.Conv2DTranspose(32, (3, 3), strides=2, activation='relu', padding='same')(conv8)
-    up5 = layers.concatenate([up5, conv1], axis=-1)
-    conv9 = DenseBlock(up5, 32)
-
-
-
-    conv10 = layers.Conv2D(1, (1, 1), activation='sigmoid', padding='same')(conv9)
+    conv10 = layers.Conv2D(1, (1, 1), activation='sigmoid', padding='same')(conv8)
     
     
 

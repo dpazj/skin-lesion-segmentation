@@ -15,7 +15,7 @@ from config import *
 from metrics import * 
 from pretrained_backbone_unet import * 
 import segmentation_models as sm
-
+sm.set_framework('tf.keras')
 
 def plot_images(dataset):
     
@@ -36,9 +36,6 @@ def plot_images(dataset):
         plt.subplot(1, 2, 2)
         plt.imshow(y[0, :, :, 0])
         plt.show()
-
-    
-
 
 
 #images
@@ -88,17 +85,16 @@ validate_dataset = create_dataset(x_val,y_val,preprocess_fn=validate_preprocess_
 #plot_images(train_dataset)
 
 #STANDARD UNET
-model = create_unet_model(SHAPE)
+#model = create_unet_model(SHAPE)
 
 
 #VGG16 UNET
 #model = create_vgg16_unet(SHAPE)
 
-#XNET
+model = sm.Unet('resnet152', encoder_weights='imagenet')
 
 
 adam = tf.keras.optimizers.Adam(learning_rate=INITIAL_LR)
-
 
 
 model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
@@ -106,7 +102,7 @@ model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_
 model.summary()
 
 
-save_path = './models/attempt1.hdf5'
+save_path = './experiment_models/attempt1.hdf5'
 checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=save_path, monitor='val_jaccard_index', save_best_only=True, verbose=1)
 
 early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_jaccard_index', min_delta=0, patience=4, verbose=0, mode='auto')

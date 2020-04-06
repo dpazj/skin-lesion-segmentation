@@ -95,7 +95,7 @@ def create_dataset(image_paths, mask_paths, preprocess_fn=functools.partial(augm
 
     if batch:
         if shuffle:
-            dataset = dataset#dataset.shuffle(length)
+            dataset = dataset.shuffle(length)
 
         dataset = dataset.repeat().batch(batch_size)
 

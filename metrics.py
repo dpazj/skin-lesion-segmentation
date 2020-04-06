@@ -16,11 +16,15 @@ def dice_loss(y_true, y_pred):
     return loss
 
 def bce_dice_loss(y_true, y_pred):
-    loss = losses.binary_crossentropy(y_true, y_pred) + dice_loss(y_true, y_pred)
+    alpha = 1
+    beta = 1
+    loss = (alpha * losses.binary_crossentropy(y_true, y_pred)) + (beta * dice_loss(y_true, y_pred))
     return loss
 
 def bce_jaccard_loss(y_true, y_pred):
-    loss = losses.binary_crossentropy(y_true, y_pred) + jaccard_loss(y_true, y_pred)
+    alpha = 0.6
+    beta = 0.4
+    loss = (alpha * losses.binary_crossentropy(y_true, y_pred)) + (beta * jaccard_loss(y_true, y_pred))
     return loss
 
 def jaccard_loss(y_true, y_pred):

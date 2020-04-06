@@ -17,7 +17,6 @@ def conv_block(input_tensor, num_filters):
 def encoder_block(input_tensor, num_filters):
   encoder = conv_block(input_tensor, num_filters)
   encoder_pool = layers.MaxPooling2D((2, 2), strides=(2, 2))(encoder)
-  
   return encoder_pool, encoder
 
 def decoder_block(input_tensor, concat_tensor, num_filters):
@@ -32,7 +31,6 @@ def decoder_block(input_tensor, concat_tensor, num_filters):
   decoder = layers.BatchNormalization()(decoder)
   decoder = layers.Activation('relu')(decoder)
   return decoder
-
 
 
 def create_unet_model(img_shape):
