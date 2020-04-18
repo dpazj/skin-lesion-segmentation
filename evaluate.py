@@ -22,12 +22,20 @@ import time
 
 now = int(time.time()) 
 
-MODEL_PATH = "./experiment_models/" 
-ENSEMBLE_MODELS = ["Loss6.hdf5"]
+
+THRESH_HOLD_CUTOFF = 0.5
+MODEL_PATH = "./models/" 
+ENSEMBLE_MODELS = ["5","6","7","8","9"]
 OUTPUT_DIR = "./test_out/"
 
-INPUT_PATH = "../Data/ISIC2018/EVAL/input"
-MASK_PATH = "../Data/ISIC2018/EVAL/mask"
+CRF_POST_PROCESS = False
+CRF_CLEAN = False
+
+GAUSSIAN_FILTER_POST_PROCESS = False
+GAUSSIAN_SIGMA = 1.0
+
+EVAL_INPUT_PATH = "../Data/ISIC2018/EVAL/input"
+EVAL_MASK_PATH = "../Data/ISIC2018/EVAL/mask"
 
 
 def jaccard(y_true, y_pred):
@@ -121,23 +129,21 @@ image_dir = pathlib.Path(INPUT_PATH)
 image_paths = list(image_dir.glob('*.jpg'))
 image_paths = [str(path) for path in image_paths]
 
-
-
-image_number = len(image_paths)
-
-
 images, sizes = load(image_paths)
 
+# image_paths = image_paths[:20] #FOR TESTING
+# images = images[:20]
+
+image_number = len(image_paths)
 print("Images loaded")
 
 predictions = np.zeros(shape=(image_number, SHAPE[0], SHAPE[0],1))
-
 
 print("Loading Models")
 
 for model_name in ENSEMBLE_MODELS:
 
-    path = MODEL_PATH + model_name
+    path = MODEL_PATH + model_name + '.hdf5'
     print(path)
     model = models.load_model(path, custom_objects={
         'bce_jaccard_loss':bce_jaccard_loss, 
@@ -160,9 +166,11 @@ predictions = sigmoid(predictions)
 predictions = np.squeeze(predictions)
 
 print("Post Processing")
+if CRF_POST_PROCESS: 
+    predictions = post_process_crf(predictions, images, CRF_CLEAN)
 
-#predictions = post_process_crf(predictions, images)
-#predictions = post_process_mask(predictions, 1.)
+if GAUSSIAN_FILTER_POST_PROCESS:
+    predictions = post_process_mask(predictions, GAUSSIAN_SIGMA)
 
    
 if not os.path.exists(OUTPUT_DIR):
@@ -182,7 +190,6 @@ idx = len(image_paths)
 print("Loading GT Masks:")
 
 
-
 results = {
     'dice' : [],
     'jaccard' : [],
@@ -194,9 +201,9 @@ results = {
 
 gt_masks = []
 for i, path in enumerate(tqdm(image_paths)):
-    base = os.path.basename(INPUT_PATH+path)
+    base = os.path.basename(EVAL_INPUT_PATH+path)
     image_name = os.path.splitext(base)[0]
-    gt_mask = tf.keras.preprocessing.image.load_img(MASK_PATH + '/' + image_name + '_segmentation.png', color_mode="grayscale")
+    gt_mask = tf.keras.preprocessing.image.load_img(EVAL_MASK_PATH + '/' + image_name + '_segmentation.png', color_mode="grayscale")
     gt_mask = np.array(gt_mask)
     gt_mask = gt_mask.astype(np.float32) * 1/255
     gt_masks.append(gt_mask)
@@ -213,11 +220,13 @@ for i_image, path in enumerate(tqdm(image_paths, miniters=1)):
     
     pred  = resize(pred , output_shape=sizes[i_image],preserve_range=True,mode='reflect', anti_aliasing=True)
 
-    threshold = 0.50 * 255
+    threshold = THRESH_HOLD_CUTOFF * 255
 
     pred[pred > threshold] = 255
     pred[pred <= threshold] = 0
-    
+
+    # img = Image.fromarray(pred.astype(np.uint8))
+    # img.save("TEST_CRF" + '/' + str(i_image) + '_crf.png')    
 
     pred = pred.astype(np.float32) * 1/255
 
@@ -248,7 +257,7 @@ mean_sensitivity = mean_sensitivity/idx
 mean_accuracy = mean_accuracy/idx
 
 print('Mean Dice = %.4f, Mean jaccard = %.4f, Pixelwise Specificity = %.4f, Pixelwise Sensitivity = %.4f, Accuracy = %.4f' % (mean_dice,mean_jaccard, mean_specificity, mean_sensitivity, mean_accuracy))
-
+print('%.4f & %.4f &, %.4f & %.4f & %.4f' % (np.std(results['jaccard']),np.std(results['dice']), np.std(results['sensitivity']), np.std(results['specificity']), np.std(results['accuracy'])))
 
 with open('pickle/tmp' + str(now) + '.pickle','wb') as handle:
     pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)

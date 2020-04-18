@@ -11,7 +11,7 @@ out_input_folder = '../Data/ISIC2018/EVAL/input/'
 
 
 files = [f for f in os.listdir(in_input_folder)]
-# select 0.1 of the files randomly 
+
 random_files = np.random.choice(files, 500, replace = False) # get 500 samples
 
 for x in random_files:

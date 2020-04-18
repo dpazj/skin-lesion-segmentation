@@ -17,6 +17,12 @@ from pretrained_backbone_unet import *
 import segmentation_models as sm
 sm.set_framework('tf.keras')
 
+
+#STANDARD UNET
+#model = create_unet_model(SHAPE)
+
+MODEL_ARCHITECTURE = sm.Unet('vgg19', encoder_weights='imagenet')
+
 def plot_images(dataset):
     
     for x,y in dataset:
@@ -39,12 +45,12 @@ def plot_images(dataset):
 
 
 #images
-image_dir = pathlib.Path("../Data/ISIC2018/Training/ISIC2018_Task1-2_Training_Input")
+image_dir = pathlib.Path(INPUT_PATH)
 image_paths = list(image_dir.glob('*.jpg'))
 image_paths = [str(path) for path in image_paths]
 
 
-mask_dir = pathlib.Path("../Data/ISIC2018/Training/ISIC2018_Task1_Training_GroundTruth")
+mask_dir = pathlib.Path(GROUNDTRUTH_PATH)
 mask_paths = list(mask_dir.glob('*.png'))
 mask_paths = [str(path) for path in mask_paths]
 
@@ -84,14 +90,8 @@ validate_dataset = create_dataset(x_val,y_val,preprocess_fn=validate_preprocess_
 
 #plot_images(train_dataset)
 
-#STANDARD UNET
-#model = create_unet_model(SHAPE)
 
-
-#VGG16 UNET
-#model = create_vgg16_unet(SHAPE)
-
-model = sm.Unet('resnet152', encoder_weights='imagenet')
+model = MODEL_ARCHITECTURE 
 
 
 adam = tf.keras.optimizers.Adam(learning_rate=INITIAL_LR)
@@ -102,7 +102,7 @@ model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_
 model.summary()
 
 
-save_path = './experiment_models/attempt1.hdf5'
+save_path = './models/attempt1.hdf5'
 checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=save_path, monitor='val_jaccard_index', save_best_only=True, verbose=1)
 
 early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_jaccard_index', min_delta=0, patience=4, verbose=0, mode='auto')

@@ -2,24 +2,19 @@
 
 ARCHITECTURE - w/BCE loss function
 
-1. NESTNET - VGG16 - Mean Dice = 0.8921, Mean jaccard = 0.8236, Pixelwise Specificity = 0.9697, Pixelwise Sensitivity = 0.9080, Accuracy = 0.9609
-2. NESTNET - ResNet50 
-3. NESTNET - ResNet101 
-    3.1 100 epoch
-4. NESTNET - VGG19 - redo
-5. Xnet - VGG16
-6. Xnet - ResNet50
-7. Xnet - ResNet101
-8. Xnet - VGG19 
+5. Xnet - VGG16: Mean Dice = 0.8966, Mean jaccard = 0.8286, Pixelwise Specificity = 0.9735, Pixelwise Sensitivity = 0.9142, Accuracy = 0.9624
+6. Xnet - ResNet50: Mean Dice = 0.8981, Mean jaccard = 0.8310, Pixelwise Specificity = 0.9743, Pixelwise Sensitivity = 0.9184, Accuracy = 0.9630
+7. Xnet - ResNet101: Mean Dice = 0.8947, Mean jaccard = 0.8258, Pixelwise Specificity = 0.9773, Pixelwise Sensitivity = 0.9077, Accuracy = 0.9633
+8. Xnet - VGG19: Mean Dice = 0.8952, Mean jaccard = 0.8270, Pixelwise Specificity = 0.9763, Pixelwise Sensitivity = 0.9110, Accuracy = 0.9627
 9. NESTNET - RESNET150
-10. Xnet - RESNET150
+10. Xnet - RESNET150 = Mean Dice = 0.9004, Mean jaccard = 0.8328, Pixelwise Specificity = 0.9802, Pixelwise Sensitivity = 0.9048, Accuracy = 0.9638
 
-u1. Unet - resnet34
-u2. Unet - vgg16
-u3. Unet - resnet50
-u4. Unet - resnet101
-u5. Unet - resnet151
-
+u1. Unet - resnet34 - Mean Dice = 0.8950, Mean jaccard = 0.8264, Pixelwise Specificity = 0.9724, Pixelwise Sensitivity = 0.9137, Accuracy = 0.9616
+u2. Unet - vgg16 - Mean Dice = 0.8967, Mean jaccard = 0.8293, Pixelwise Specificity = 0.9725, Pixelwise Sensitivity = 0.9050, Accuracy = 0.9607
+u3. Unet - resnet50 - Mean Dice = 0.8971, Mean jaccard = 0.8295, Pixelwise Specificity = 0.9710, Pixelwise Sensitivity = 0.9109, Accuracy = 0.9621
+u4. Unet - resnet101 - Mean Dice = 0.8932, Mean jaccard = 0.8265, Pixelwise Specificity = 0.9629, Pixelwise Sensitivity = 0.9199, Accuracy = 0.9603
+u5. Unet - resnet152 - Mean Dice = 0.8973, Mean jaccard = 0.8286, Pixelwise Specificity = 0.9775, Pixelwise Sensitivity = 0.8875, Accuracy = 0.9637
+u6. Unet - vgg19
 
 
 LOSS function (unet, lr = 0.00001, 150 epoch)
@@ -27,9 +22,74 @@ LOSS function (unet, lr = 0.00001, 150 epoch)
 1. BCE - Mean Dice = 0.8774, Mean jaccard = 0.8023, Pixelwise Specificity = 0.9789, Pixelwise Sensitivity = 0.8632, Accuracy = 0.9543
 2. JACCARD - Mean Dice = 0.8812, Mean jaccard = 0.8093, Pixelwise Specificity = 0.9709, Pixelwise Sensitivity = 0.8993, Accuracy = 0.9553
 3. DICE - Mean Dice = 0.8772, Mean jaccard = 0.8034, Pixelwise Specificity = 0.9607, Pixelwise Sensitivity = 0.9220, Accuracy = 0.9529
-4. BCE_JACCARD a = 1 b = 1:  0.8773, Mean jaccard = 0.8030, Pixelwise Specificity = 0.9676, Pixelwise Sensitivity = 0.9117, Accuracy = 0.9570
-5. BCE_JACCARD a = 0.4 b = 0.6: Mean Dice = 0.8777, Mean jaccard = 0.8054, Pixelwise Specificity = 0.9638, Pixelwise Sensitivity = 0.9090, Accuracy = 0.9549
-6. BCE_JACCARD a = 0.6 b = 0.4: Mean Dice = 0.8850, Mean jaccard = 0.8130, Pixelwise Specificity = 0.9691, Pixelwise Sensitivity = 0.9088, Accuracy = 0.9567
+4. BCE_JACCARD a = 0.5:  0.8773, Mean jaccard = 0.8030, Pixelwise Specificity = 0.9676, Pixelwise Sensitivity = 0.9117, Accuracy = 0.9570
+5. BCE_JACCARD a = 0.4: Mean Dice = 0.8850, Mean jaccard = 0.8130, Pixelwise Specificity = 0.9691, Pixelwise Sensitivity = 0.9088, Accuracy = 0.9567
+6. BCE_JACCARD a = 0.6: Mean Dice = 0.8777, Mean jaccard = 0.8054, Pixelwise Specificity = 0.9638, Pixelwise Sensitivity = 0.9090, Accuracy = 0.9549
+
+kfold: (Bad results)
+
+1.1 val_loss: 0.1467 - val_jaccard_loss: 0.2999 - val_jaccard_index: 0.7001 - val_dice_coeff: 0.8179 - val_pixelwise_specificity: 0.9509 - val_pixelwise_sensitivity: 0.8601 - val_pixelwise_accuracy: 0.8060
+1.2 val_loss: 0.1343 - val_jaccard_loss: 0.3622 - val_jaccard_index: 0.6378 - val_dice_coeff: 0.7692 - val_pixelwise_specificity: 0.9390 - val_pixelwise_sensitivity: 0.8693 - val_pixelwise_accuracy: 0.6820
+1.3 val_loss: 0.1232 - val_jaccard_loss: 0.3076 - val_jaccard_index: 0.6924 - val_dice_coeff: 0.8091 - val_pixelwise_specificity: 0.9489 - val_pixelwise_sensitivity: 0.8706 - val_pixelwise_accuracy: 0.7922
+1.4 val_loss: 0.1041 - val_jaccard_loss: 0.2592 - val_jaccard_index: 0.7408 - val_dice_coeff: 0.8471 - val_pixelwise_specificity: 0.9572 - val_pixelwise_sensitivity: 0.8794 - val_pixelwise_accuracy: 0.8121
+1.5 val_loss: 0.1374 - val_jaccard_loss: 0.3443 - val_jaccard_index: 0.6557 - val_dice_coeff: 0.7836 - val_pixelwise_specificity: 0.9340 - val_pixelwise_sensitivity: 0.8918 - val_pixelwise_accuracy: 0.6873
+
+2.1 val_loss: 0.2669 - val_jaccard_loss: 0.2665 - val_jaccard_index: 0.7335 - val_dice_coeff: 0.8406 - val_pixelwise_specificity: 0.9620 - val_pixelwise_sensitivity: 0.8854 - val_pixelwise_accuracy: 0.8270
+2.2 val_loss: 0.2521 - val_jaccard_loss: 0.2529 - val_jaccard_index: 0.7471 - val_dice_coeff: 0.8505 - val_pixelwise_specificity: 0.9734 - val_pixelwise_sensitivity: 0.8816 - val_pixelwise_accuracy: 0.8635
+2.3 val_loss: 0.2795 - val_jaccard_loss: 0.2814 - val_jaccard_index: 0.7186 - val_dice_coeff: 0.8276 - val_pixelwise_specificity: 0.9530 - val_pixelwise_sensitivity: 0.9031 - val_pixelwise_accuracy: 0.7719
+2.4 val_loss: 0.2429 - val_jaccard_loss: 0.2455 - val_jaccard_index: 0.7545 - val_dice_coeff: 0.8557 - val_pixelwise_specificity: 0.9666 - val_pixelwise_sensitivity: 0.8961 - val_pixelwise_accuracy: 0.8080
+2.5 val_loss: 0.2453 - val_jaccard_loss: 0.2490 - val_jaccard_index: 0.7510 - val_dice_coeff: 0.8522 - val_pixelwise_specificity: 0.9717 - val_pixelwise_sensitivity: 0.8843 - val_pixelwise_accuracy: 0.8447
+
+3.1 val_loss: 0.1503 - val_jaccard_loss: 0.2531 - val_jaccard_index: 0.7469 - val_dice_coeff: 0.8500 - val_pixelwise_specificity: 0.9590 - val_pixelwise_sensitivity: 0.8956 - val_pixelwise_accuracy: 0.8461
+3.2 val_loss: 0.1560 - val_jaccard_loss: 0.2635 - val_jaccard_index: 0.7365 - val_dice_coeff: 0.8425 - val_pixelwise_specificity: 0.9680 - val_pixelwise_sensitivity: 0.8944 - val_pixelwise_accuracy: 0.8195
+3.3 val_loss: 0.1657 - val_jaccard_loss: 0.2723 - val_jaccard_index: 0.7277 - val_dice_coeff: 0.8338 - val_pixelwise_specificity: 0.9601 - val_pixelwise_sensitivity: 0.8974 - val_pixelwise_accuracy: 0.7988
+3.4 val_loss: 0.1266 - val_jaccard_loss: 0.2198 - val_jaccard_index: 0.7802 - val_dice_coeff: 0.8729 - val_pixelwise_specificity: 0.9700 - val_pixelwise_sensitivity: 0.9020 - val_pixelwise_accuracy: 0.8571
+3.5 val_loss: 0.1398 - val_jaccard_loss: 0.2427 - val_jaccard_index: 0.7573 - val_dice_coeff: 0.8556 - val_pixelwise_specificity: 0.9698 - val_pixelwise_sensitivity: 0.8918 - val_pixelwise_accuracy: 0.8547
+
+4.1 val_loss: 0.2250 - val_jaccard_loss: 0.2660 - val_jaccard_index: 0.7340 - val_dice_coeff: 0.8402 - val_pixelwise_specificity: 0.9707 - val_pixelwise_sensitivity: 0.8660 - val_pixelwise_accuracy: 0.8731
+4.2 val_loss: 0.2129 - val_jaccard_loss: 0.2704 - val_jaccard_index: 0.7296 - val_dice_coeff: 0.8394 - val_pixelwise_specificity: 0.9747 - val_pixelwise_sensitivity: 0.8751 - val_pixelwise_accuracy: 0.8403
+4.3 val_loss: 0.2056 - val_jaccard_loss: 0.2696 - val_jaccard_index: 0.7304 - val_dice_coeff: 0.8370 - val_pixelwise_specificity: 0.9653 - val_pixelwise_sensitivity: 0.8712 - val_pixelwise_accuracy: 0.8400
+4.4 val_loss: 0.1880 - val_jaccard_loss: 0.2462 - val_jaccard_index: 0.7538 - val_dice_coeff: 0.8556 - val_pixelwise_specificity: 0.9659 - val_pixelwise_sensitivity: 0.8979 - val_pixelwise_accuracy: 0.8168
+4.5 val_loss: 0.2041 - val_jaccard_loss: 0.2577 - val_jaccard_index: 0.7423 - val_dice_coeff: 0.8461 - val_pixelwise_specificity: 0.9606 - val_pixelwise_sensitivity: 0.8937 - val_pixelwise_accuracy: 0.8308
+
+5.1 val_loss: 0.2474 - val_jaccard_loss: 0.2964 - val_jaccard_index: 0.7036 - val_dice_coeff: 0.8191 - val_pixelwise_specificity: 0.9473 - val_pixelwise_sensitivity: 0.8896 - val_pixelwise_accuracy: 0.7605
+5.2 val_loss: 0.2252 - val_jaccard_loss: 0.2656 - val_jaccard_index: 0.7344 - val_dice_coeff: 0.8423 - val_pixelwise_specificity: 0.9706 - val_pixelwise_sensitivity: 0.8819 - val_pixelwise_accuracy: 0.8381
+5.3 val_loss: 0.2288 - val_jaccard_loss: 0.2776 - val_jaccard_index: 0.7224 - val_dice_coeff: 0.8312 - val_pixelwise_specificity: 0.9612 - val_pixelwise_sensitivity: 0.8839 - val_pixelwise_accuracy: 0.8174
+5.4 val_loss: 0.1919 - val_jaccard_loss: 0.2300 - val_jaccard_index: 0.7700 - val_dice_coeff: 0.8667 - val_pixelwise_specificity: 0.9707 - val_pixelwise_sensitivity: 0.8910 - val_pixelwise_accuracy: 0.8477
+5.5 val_loss: 0.2176 - val_jaccard_loss: 0.2566 - val_jaccard_index: 0.7434 - val_dice_coeff: 0.8468 - val_pixelwise_specificity: 0.9596 - val_pixelwise_sensitivity: 0.8938 - val_pixelwise_accuracy: 0.8325
+
+6.1 val_loss: 0.2170 - val_jaccard_loss: 0.2796 - val_jaccard_index: 0.7204 - val_dice_coeff: 0.8313 - val_pixelwise_specificity: 0.9600 - val_pixelwise_sensitivity: 0.8690 - val_pixelwise_accuracy: 0.8375
+6.2 val_loss: 0.1904 - val_jaccard_loss: 0.2633 - val_jaccard_index: 0.7367 - val_dice_coeff: 0.8441 - val_pixelwise_specificity: 0.9697 - val_pixelwise_sensitivity: 0.8809 - val_pixelwise_accuracy: 0.8351
+6.3 val_loss: 0.2009 - val_jaccard_loss: 0.2961 - val_jaccard_index: 0.7039 - val_dice_coeff: 0.8174 - val_pixelwise_specificity: 0.9573 - val_pixelwise_sensitivity: 0.8768 - val_pixelwise_accuracy: 0.7823
+6.4 val_loss: 0.1754 - val_jaccard_loss: 0.2394 - val_jaccard_index: 0.7606 - val_dice_coeff: 0.8611 - val_pixelwise_specificity: 0.9653 - val_pixelwise_sensitivity: 0.8859 - val_pixelwise_accuracy: 0.8437
+6.5 val_loss: 0.1983 - val_jaccard_loss: 0.2874 - val_jaccard_index: 0.7126 - val_dice_coeff: 0.8252 - val_pixelwise_specificity: 0.9625 - val_pixelwise_sensitivity: 0.8742 - val_pixelwise_accuracy: 0.7934
+
+Averages of kfold: 
+0.3146 0.6854 0.9460 0.8054 0.8742
+0.2591 0.7409 0.9653 0.8453 0.8901
+0.2503 0.7497 0.9654 0.8510 0.8962
+0.2620 0.7380 0.9674 0.8437 0.8808
+0.2652 0.7348 0.9619 0.8412 0.8880
+0.2732 0.7268 0.9630 0.8358 0.8774
+
+Post Processing - Unet
+
+No Gaussian - Mean Dice = 0.8774, Mean jaccard = 0.8023, Pixelwise Specificity = 0.9789, Pixelwise Sensitivity = 0.8632, Accuracy = 0.9543, 0.1731 & 0.1371 &, 0.1529 & 0.0566 & 0.0645
+Gaussian = 0.5 - Mean Dice = 0.8804, Mean jaccard = 0.8067, Pixelwise Specificity = 0.9598, Pixelwise Sensitivity = 0.9158, Accuracy = 0.9536 0.1696 & 0.1366 &, 0.1241 & 0.0839 & 0.0662
+Gaussian = 1.0 - Mean Dice = 0.8801, Mean jaccard = 0.8061, Pixelwise Specificity = 0.9595, Pixelwise Sensitivity = 0.9169, Accuracy = 0.9536 0.1693 & 0.1365 &, 0.1238 & 0.0841 & 0.0661
+Gaussian = 1.5 - Mean Dice = 0.8794, Mean jaccard = 0.8050, Pixelwise Specificity = 0.9590, Pixelwise Sensitivity = 0.9185, Accuracy = 0.9535 0.1689 & 0.1363 &, 0.1234 & 0.0843 & 0.0661
+Gaussian = 2.0 - Mean Dice = 0.8786, Mean jaccard = 0.8036, Pixelwise Specificity = 0.9584, Pixelwise Sensitivity = 0.9203, Accuracy = 0.9534 0.1684 & 0.1360 &, 0.1229 & 0.0846 & 0.0660
+CRF Test set - Mean Dice = 0.8368, Mean jaccard = 0.7542, Pixelwise Specificity = 0.9832, Pixelwise Sensitivity = 0.7794, Accuracy = 0.9485 0.2169 & 0.1901 &, 0.2145 & 0.0636 & 0.0724
+
+CRF + Crf post process
+
+No Gaussian - 0.8774 & Mean jaccard = 0.8023 & Pixelwise Specificity = 0.9789 & 0.8632 & 0.9543
+Gaussian = 0.5 - 0.8804 & Mean jaccard = 0.8067 & Pixelwise Specificity = 0.9598 & 0.9158 & 0.9536 
+Gaussian = 1.0 - 0.8801 & Mean jaccard = 0.8061 & Pixelwise Specificity = 0.9595 & 0.9169 & 0.9536 
+Gaussian = 1.5 - 0.8794 & Mean jaccard = 0.8050 & Pixelwise Specificity = 0.9590 & 0.9185 & 0.9535 
+Gaussian = 2.0 - 0.8786 & Mean jaccard = 0.8036 & Pixelwise Specificity = 0.9584 & 0.9203 & 0.9534 
+CRF - 0.8368 & Mean jaccard = 0.7542 & Pixelwise Specificity = 0.9832 & 0.7794 & 0.9485 
+
 
 
 

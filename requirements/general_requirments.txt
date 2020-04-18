@@ -1,0 +1,10 @@
+numpy
+matplotlib
+sklearn
+segmentation-models
+tensorflow-addons
+scikit-image
+tqdm
+Pillow
+scipy
+seaborn

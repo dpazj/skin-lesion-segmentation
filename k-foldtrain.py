@@ -5,6 +5,7 @@ import math
 import pathlib
 import numpy as np
 import tensorflow as tf
+import gc
 import keras
 
 from skimage import io
@@ -19,13 +20,16 @@ from keras import optimizers
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+from UNetPlusPlus import segmentation_models
 from UNetPlusPlus.segmentation_models import Xnet, Nestnet
 
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from config import * 
 from metrics import * 
+from unet import * 
 
+MODEL_ARCHITECTURE = Xnet(backbone_name='resnext101', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
 
 def load_image_by_pathname(image_path, mask=False):
     
@@ -78,45 +82,47 @@ def plot_images(a, b):
     
     for x,y in zip(a,b):
         plt.figure(figsize=(10, 10))
-        img = x[0]
+        img = x
 
         plt.subplot(1, 2, 1)
         plt.imshow(img)
 
         plt.subplot(1, 2, 2)
-        plt.imshow(y[0,:, :, 0])
-        plt.show()   
+        plt.imshow(y[:, :, 0])
+        plt.savefig('foo.png') 
+        input("Press Enter to continue...")
     
 
 
 
     
 #images
-image_dir = pathlib.Path("../Data/ISIC2018/Training/ISIC2018_Task1-2_Training_Input")
+image_dir = pathlib.Path(INPUT_PATH) 
 image_paths = list(image_dir.glob('*.jpg'))
 image_paths = [str(path) for path in image_paths]
+image_paths = sorted(image_paths)
 
-
-mask_dir = pathlib.Path("../Data/ISIC2018/Training/ISIC2018_Task1_Training_GroundTruth")
+mask_dir = pathlib.Path(GROUNDTRUTH_PATH)
 mask_paths = list(mask_dir.glob('*.png'))
 mask_paths = [str(path) for path in mask_paths]
-
-
-
+mask_paths = sorted(mask_paths)
 
 images, masks = load(image_paths, mask_paths)
 
 #plot_images(images,masks)
 
-kfold = KFold(5, True, 42)
+kfold = KFold(n_splits=5, random_state=42, shuffle=True)
 
 idx = 0
 
-for train_idx, test_idx in kfold.split(images, masks):
+for train_idx, test_idx in kfold.split(images):
+        
     x_train = images[train_idx]
     y_train = masks[train_idx]
+    
     x_test = images[test_idx]
     y_test = masks[test_idx]
+    
     
     num_train = len(x_train)
 
@@ -130,26 +136,31 @@ for train_idx, test_idx in kfold.split(images, masks):
 
     x = img_gen.flow(x=x_train, batch_size=BATCH_SIZE, seed=seed)
     y = mask_gen.flow(x=y_train, batch_size=BATCH_SIZE, seed=seed)
-
+    
+    
+    
     train = zip(x,y)
 
-    adam = optimizers.Adam(lr=INITIAL_LR)
+    adam = tf.keras.optimizers.Adam(lr=INITIAL_LR)
+    
 
-    #UNET RESENT BACKBONE
 
-    model = Xnet(backbone_name='resnet50', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
-    model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
+    model = MODEL_ARCHITECTURE
+    
+    model.compile(optimizer=adam, loss=bce_jaccard_loss, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
 
-    save_path = './k-fold/kfmodel'+1+'.hdf5'
+    save_path = './models/kfmodel_unetbcej06loss_'+str(idx)+'.hdf5'
     checkpoint = ModelCheckpoint(filepath=save_path, monitor='val_jaccard_index', save_best_only=True, verbose=1)
 
 
-    history = model.fit_generator(
+    model.fit_generator(
         generator=train, 
         steps_per_epoch=int(np.ceil(num_train / float(BATCH_SIZE))),
         epochs=EPOCHS, 
         validation_data=(x_test, y_test),
         callbacks=[checkpoint]
         )
-
-
+    
+    del model
+    gc.collect()
+    idx += 1

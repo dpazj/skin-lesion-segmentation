@@ -1,3 +1,12 @@
+pickle/
 models/
+npsave/
+UNetPlusPlus/
+pydensecrf/
+test-out-zips/
+test_out/
+experiment_models/
 __pycache__/
 *.png
+k-fold/
+

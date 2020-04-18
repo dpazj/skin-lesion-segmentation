@@ -25,6 +25,8 @@ from sklearn.model_selection import train_test_split
 from config import * 
 from metrics import * 
 
+MODEL_ARCHITECTURE = Xnet(backbone_name='vgg19', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+
 
 def load_image_by_pathname(image_path, mask=False):
     
@@ -96,12 +98,12 @@ def plot_images(a, b):
       
     
 #images
-image_dir = pathlib.Path("../Data/ISIC2018/Training/ISIC2018_Task1-2_Training_Input")
+image_dir = pathlib.Path(INPUT_PATH)
 image_paths = list(image_dir.glob('*.jpg'))
 image_paths = [str(path) for path in image_paths]
 
 
-mask_dir = pathlib.Path("../Data/ISIC2018/Training/ISIC2018_Task1_Training_GroundTruth")
+mask_dir = pathlib.Path(GROUNDTRUTH_PATH)
 mask_paths = list(mask_dir.glob('*.png'))
 mask_paths = [str(path) for path in mask_paths]
 
@@ -133,8 +135,7 @@ adam = optimizers.Adam(lr=INITIAL_LR)
 
 #UNET RESENT BACKBONE
 
-#model = Xnet(backbone_name='vgg19', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
-model = Nestnet(backbone_name='vgg19', encoder_weights='imagenet', decoder_block_type='transpose', input_shape=SHAPE, classes=1)
+model = MODEL_ARCHITECTURE
 
 model.compile(optimizer=adam, loss=losses.binary_crossentropy, metrics=[jaccard_loss, jaccard_index, dice_coeff, pixelwise_specificity, pixelwise_sensitivity, pixelwise_accuracy])
 
