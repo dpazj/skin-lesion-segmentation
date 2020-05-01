@@ -5,6 +5,9 @@ from tensorflow.python.keras import models
 from tensorflow.python.keras import backend as K 
 
 
+#https://github.com/tensorflow/models/blob/segmentation_blogpost/samples/outreach/blogs/segmentation_blogpost/image_segmentation.ipynb <- where i origninally got it from, however the link is broken but i found a forked version at:
+#https://colab.research.google.com/github/MarkDaoust/models/blob/segmentation_blogpost/samples/outreach/blogs/segmentation_blogpost/image_segmentation.ipynb
+
 def conv_block(input_tensor, num_filters):
   encoder = layers.Conv2D(num_filters, (3, 3), padding='same')(input_tensor)
   encoder = layers.BatchNormalization()(encoder)

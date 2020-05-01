@@ -93,3 +93,98 @@ CRF - 0.8368 & Mean jaccard = 0.7542 & Pixelwise Specificity = 0.9832 & 0.7794 &
 
 
 
+TIMING EXPERIMENTS
+
+ENSEMBLE
+
+1 model = 15.515625
+2 model = 23.703125
+3 model = 32.265625
+4 models = 43.34375
+5 models = 48.96875
+
+POST Processing
+
+None = 16.78125
+Gaussian = 16.84375
+CRF  = 63.703125
+
+
+
+
+
+CLASSIFICATION: 
+
+NO mask: 
+	loss: 0.39
+	accuracy: 0.87
+	auc: 0.99
+	precision: 0.88
+	recall: 0.86
+
+	Per class recall:
+		MEL      0.668
+		NV       0.915
+		BCC      0.883
+		AKIEC    0.723
+		BKL      0.764
+		DF       0.739
+
+	Balanced Multiclass Accuracy     0.782
+
+Mask: 
+
+	loss: 0.59
+	accuracy: 0.81
+	auc: 0.97
+	precision: 0.82
+	recall: 0.79
+
+	Per class recall:
+		MEL      0.659
+		NV       0.860
+		BCC      0.757
+		AKIEC    0.662
+		BKL      0.727
+		DF       0.652
+
+	Balanced Multiclass Accuracy     0.720
+
+Mask 1 Dilation: 
+	loss: 0.56
+	accuracy: 0.81
+	auc: 0.97
+	precision: 0.83
+	recall: 0.79
+
+	Per class recall:
+		MEL      0.646
+		NV       0.862
+		BCC      0.709
+		AKIEC    0.646
+		BKL      0.736
+		DF       0.783
+
+Balanced Multiclass Accuracy     0.730
+	
+
+Mask: 5 Dialations
+	
+	loss: 0.59
+	accuracy: 0.80
+	auc: 0.97
+	precision: 0.81
+	recall: 0.78
+
+	Per class recall:
+		MEL      0.709
+		NV       0.844
+		BCC      0.699
+		AKIEC    0.600
+		BKL      0.677
+		DF       0.609
+
+	Balanced Multiclass Accuracy     0.690
+
+
+
